@@ -1,13 +1,13 @@
 {
   "id": "./painel.html",
-  "name": "NEXOS FF Sensibilidade PRO",
-  "short_name": "NEXOS FF PRO",
-  "description": "Painel de sugestões de sensibilidade para Free Fire.",
+  "name": "NEXOS FF Sensibilidade PREMIUM",
+  "short_name": "NEXOS FF",
+  "description": "Painel premium de sugestões de sensibilidade.",
   "start_url": "./painel.html",
   "scope": "./",
   "display": "standalone",
   "background_color": "#090914",
-  "theme_color": "#090914",
+  "theme_color": "#171304",
   "icons": [
     {
       "src": "icon.svg",

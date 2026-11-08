@@ -53,6 +53,8 @@ const seed=[
 {id:5,name:"Planilha Inteligente",category:"Softwares",desc:"Organize tarefas, metas e informações em um só lugar.",price:12.90,icon:"📊"},
 {id:6,name:"Pack de Ícones Premium",category:"Outros",desc:"Coleção de ícones para projetos pessoais e comerciais autorizados.",price:9.90,icon:"💠"},
 {id:7,name:"NEXOS FF Sensibilidade PRO",category:"Painéis FF",desc:"Painel interativo com identificação aproximada do dispositivo e sugestões de sensibilidade para testar no jogo.",price:3.99,icon:"🎯"}
+,
+{id:7,name:"NEXOS FF Sensibilidade PRO",category:"Softwares",desc:"Painel interativo que identifica informações disponíveis do aparelho e sugere ajustes iniciais de sensibilidade para testar.",price:3.99,icon:"🎯"}
 ];
 let products=JSON.parse(localStorage.getItem("nexosProducts")||"null")||seed;
 let cart=[];
@@ -60,8 +62,9 @@ let category="Todos";
 const money=n=>n.toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
 function save(){localStorage.setItem("nexosProducts",JSON.stringify(products))}
 function renderChips(){let cats=["Todos",...new Set(products.map(p=>p.category))];document.getElementById("chips").innerHTML=cats.map(c=>`<button class="chip ${category===c?'active':''}" onclick="category='${c.replace(/'/g,"\\'")}';renderChips();renderProducts()">${c}</button>`).join("")}
-function renderProducts(){renderChips();let q=document.getElementById("search").value.toLowerCase();let list=products.filter(p=>(category==="Todos"||p.category===category)&&(p.name+" "+p.desc+" "+p.category).toLowerCase().includes(q));document.getElementById("products").innerHTML=list.length?list.map(p=>`<article class="product"><div class="thumb">${p.icon||"📦"}</div><div class="product-body"><div class="category">${p.category}</div><h3>${escapeHtml(p.name)}</h3><div class="desc">${escapeHtml(p.desc)}</div><div class="price-row"><span class="price">${money(Number(p.price))}</span><button class="add" onclick="addCart(${p.id})">Adicionar +</button></div></div></article>`).join(""):`<div class="empty">Nenhum produto encontrado. Tente outra busca.</div>`}
+function renderProducts(){renderChips();let q=document.getElementById("search").value.toLowerCase();let list=products.filter(p=>(category==="Todos"||p.category===category)&&(p.name+" "+p.desc+" "+p.category).toLowerCase().includes(q));document.getElementById("products").innerHTML=list.length?list.map(p=>`<article class="product"><div class="thumb">${p.icon||"📦"}</div><div class="product-body"><div class="category">${p.category}</div><h3>${escapeHtml(p.name)}</h3><div class="desc">${escapeHtml(p.desc)}</div><div class="price-row"><span class="price">${money(Number(p.price))}</span>${p.id===7?`<button class="add" onclick="openPanel()">Ver painel</button>`:""}<button class="add" onclick="addCart(${p.id})">Adicionar +</button></div></div></article>`).join(""):`<div class="empty">Nenhum produto encontrado. Tente outra busca.</div>`}
 function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function openPanel(){window.open("painel.html","_blank","noopener");}
 function addCart(id){let p=products.find(x=>x.id===id);if(p){cart.push(p);updateCount()}}
 function updateCount(){document.getElementById("cartCount").textContent=cart.length}
 function openCart(){document.getElementById("cartItems").innerHTML=cart.length?cart.map((p,i)=>`<div class="cartline"><div><b>${escapeHtml(p.name)}</b><br><small>${p.category}</small></div><div>${money(Number(p.price))} <button class="danger" onclick="removeCart(${i})">×</button></div></div>`).join(""):`<p class="muted">Seu carrinho está vazio.</p>`;document.getElementById("cartTotal").textContent=money(cart.reduce((s,p)=>s+Number(p.price),0));document.getElementById("cartOverlay").classList.add("show")}
